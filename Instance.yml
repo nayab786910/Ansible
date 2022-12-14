@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  become: yes
+  tasks:
+    - name: provision ec2 sandbox instance(s)
+      ec2:
+        assign_public_ip: yes
+        key_name: "ohio"
+        image: "ami-0283a57753b18025b"
+        instance_type: "t2.micro"
+        region: "us-east-2"
+        volumes:
+          - device_name: /dev/sda1
+            delete_on_termination: true
+            volume_type: gp2
+            volume_size: 60
+            # - device_name: /dev/sdb
+            #   delete_on_termination: true
+            #   volume_type: gp2
+            #   volume_size: 10
+        vpc_subnet_id: "subnet-c4e23dad"
+        wait: true
+        instance_tags:  '{"Name":"Ansible"}'
+      register: ec2
